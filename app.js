@@ -20,13 +20,21 @@ db.once('open', () => {
 app.engine('hbs', exphbs({ defaultLayout: 'main', extname: '.hbs' }))
 app.set('view engine', 'hbs')
 
+// BODY PARSER
+app.use(express.urlencoded({ extended: true }))
+
 // ROUTES
 app.get('/', (req, res) => {
-  Todo.find().lean().then(todos => {
-    res.render('index', { todos })
-  }).catch(e => {
-    console.error(e)
-  })
+  Todo.find().lean().then(todos => res.render('index', { todos })).catch(e => console.error(e))
+})
+
+app.get('/todos/new', (req, res) => {
+  res.render('new')
+})
+
+app.post('/todos', (req, res) => {
+  const name = req.body.name
+  Todo.create({ name }).then(() => res.redirect('/')).catch(e => console.log(e))
 })
 
 // LISTENING
