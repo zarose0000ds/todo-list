@@ -42,6 +42,20 @@ app.post('/todos', (req, res) => {
   Todo.create({ name }).then(() => res.redirect('/')).catch(e => console.log(e))
 })
 
+app.get('/todos/:id/edit', (req, res) => {
+  const id = req.params.id
+  Todo.findById(id).lean().then(todo => res.render('edit', { todo })).catch(e => console.log(e))
+})
+
+app.post('/todos/:id/edit', (req, res) => {
+  const id = req.params.id
+  const name = req.body.name
+  Todo.findById(id).then(todo => {
+    todo.name = name
+    todo.save()
+  }).then(() => res.redirect(`/todos/${id}`)).catch(e => console.log(e))
+})
+
 // LISTENING
 app.listen(port, () => {
   console.log(`App is running on http://localhost:${port}`)
