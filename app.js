@@ -26,7 +26,7 @@ app.use(express.urlencoded({ extended: true }))
 
 // ROUTES
 app.get('/', (req, res) => {
-  Todo.find().lean().then(todos => res.render('index', { todos })).catch(e => console.error(e))
+  Todo.find().lean().sort({ _id: 'asc' }).then(todos => res.render('index', { todos })).catch(e => console.error(e))
 })
 
 app.post('/todos', (req, res) => {
