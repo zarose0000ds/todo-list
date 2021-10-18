@@ -31,7 +31,7 @@ app.use(session({
 // PASSPORT
 usePassport(app)
 
-//
+// SAVE AUTHENTICATION INFO FOR RES
 app.use((req, res ,next) => {
   res.locals.isAuthenticated = req.isAuthenticated()
   res.locals.user = req.user
