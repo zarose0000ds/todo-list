@@ -3,6 +3,7 @@ const session = require('express-session')
 const exphbs = require('express-handlebars')
 const methodOverride = require('method-override')
 
+const usePassport = require('./config/passport')
 const routes = require('./routes')
 const Todo = require('./models/todo')
 require('./config/mongoose')
@@ -14,6 +15,12 @@ const PORT = process.env.PORT || 3000
 app.engine('hbs', exphbs({ defaultLayout: 'main', extname: '.hbs' }))
 app.set('view engine', 'hbs')
 
+// BODY PARSER
+app.use(express.urlencoded({ extended: true }))
+
+// METHOD OVERRIDE
+app.use(methodOverride('_method'))
+
 // SESSION
 app.use(session({
   secret: 'ThisIsMySecret',
@@ -21,11 +28,8 @@ app.use(session({
   saveUninitialized: true
 }))
 
-// BODY PARSER
-app.use(express.urlencoded({ extended: true }))
-
-// METHOD OVERRIDE
-app.use(methodOverride('_method'))
+// PASSPORT
+usePassport(app)
 
 // ROUTER
 app.use(routes)
